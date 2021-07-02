@@ -24,7 +24,7 @@ DATABASE_URI = os.getenv(
 ######################################################################
 #  P R O M O T I O N   M O D E L   T E S T   C A S E S
 ######################################################################
-class TestPetModel(unittest.TestCase):
+class TestPromotionModel(unittest.TestCase):
     """ Test Cases for Promotion Model """
 
     @classmethod
@@ -65,7 +65,7 @@ class TestPetModel(unittest.TestCase):
         self.assertEqual(promotion.start_date, "2021-11-01")
         self.assertEqual(promotion.end_date, "2021-12-24")
         
-    def test_add_a_pet(self):
+    def test_add_a_promotion(self):
         """ Create a promotion and add it to the database """
         promotions = Promotion.all()
         self.assertEqual(promotions, [])
@@ -79,7 +79,7 @@ class TestPetModel(unittest.TestCase):
         self.assertEqual(len(promotions), 1)
 
 
-    def test_serialize_a_pet(self):
+    def test_serialize_a_promotion(self):
         """ Test serialization of a Promotion """
         promotion = PromotionFactory()
         data = promotion.serialize()
@@ -95,7 +95,7 @@ class TestPetModel(unittest.TestCase):
         self.assertIn("end_date", data)
         self.assertEqual(data["end_date"], promotion.end_date)
 
-    def test_deserialize_a_pet(self):
+    def test_deserialize_a_promotion(self):
         """ Test deserialization of a Promotion """
         data = {
             "id": 1,
