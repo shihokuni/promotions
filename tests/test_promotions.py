@@ -9,3 +9,123 @@ While debugging just these tests it's convinient to use this:
     nosetests --stop tests/test_promotionss.py:TestPromotionModel
 
 """
+import os
+import logging
+import unittest
+from werkzeug.exceptions import NotFound
+from service.models import Promotion, DataValidationError, db
+from service import app
+from .factories import PromotionFactory
+
+DATABASE_URI = os.getenv(
+    "DATABASE_URI", "postgres://postgres:postgres@localhost:5432/postgres"
+)
+
+######################################################################
+#  P R O M O T I O N   M O D E L   T E S T   C A S E S
+######################################################################
+class TestPetModel(unittest.TestCase):
+    """ Test Cases for Promotion Model """
+
+    @classmethod
+    def setUpClass(cls):
+        """ This runs once before the entire test suite """
+        app.config["TESTING"] = True
+        app.config["DEBUG"] = False
+        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
+        app.logger.setLevel(logging.CRITICAL)
+        Promotion.init_db(app)
+
+    @classmethod
+    def tearDownClass(cls):
+        """ This runs once after the entire test suite """
+        pass
+
+    def setUp(self):
+        """ This runs before each test """
+        db.drop_all()  # clean up the last tests
+        db.create_all()  # make our sqlalchemy tables
+
+    def tearDown(self):
+        """ This runs after each test """
+        db.session.remove()
+        db.drop_all()
+
+    ######################################################################
+    #  T E S T   C A S E S
+    ######################################################################
+
+    def test_create_a_promotion(self):
+        """ Create a promotion and assert that it exists """
+        promotion = Promotion(title="Winter Sale", promotion_type="30%OFF", start_date="2021-11-01", end_date="2021-12-24")
+        self.assertTrue(promotion != None)
+        self.assertEqual(promotion.id, None)
+        self.assertEqual(promotion.title, "Winter Sale")
+        self.assertEqual(promotion.promotion_type, "30%OFF")
+        self.assertEqual(promotion.start_date, "2021-11-01")
+        self.assertEqual(promotion.end_date, "2021-12-24")
+        
+    def test_add_a_pet(self):
+        """ Create a promotion and add it to the database """
+        promotions = Promotion.all()
+        self.assertEqual(promotions, [])
+        promotion = Promotion(title="Winter Sale", promotion_type="30%OFF", start_date="2021-11-01", end_date="2021-12-24")
+        self.assertTrue(promotion != None)
+        self.assertEqual(promotion.id, None)
+        promotion.create()
+        # Asert that it was assigned an id and shows up in the database
+        self.assertEqual(promotion.id, 1)
+        promotions = Promotion.all()
+        self.assertEqual(len(promotions), 1)
+
+
+    def test_serialize_a_pet(self):
+        """ Test serialization of a Promotion """
+        promotion = PromotionFactory()
+        data = promotion.serialize()
+        self.assertNotEqual(data, None)
+        self.assertIn("id", data)
+        self.assertEqual(data["id"], promotion.id)
+        self.assertIn("title", data)
+        self.assertEqual(data["title"], promotion.title)
+        self.assertIn("promotion_type", data)
+        self.assertEqual(data["promotion_type"], promotion.promotion_type)
+        self.assertIn("start_date", data)
+        self.assertEqual(data["start_date"], promotion.start_date)
+        self.assertIn("end_date", data)
+        self.assertEqual(data["end_date"], promotion.end_date)
+
+    def test_deserialize_a_pet(self):
+        """ Test deserialization of a Promotion """
+        data = {
+            "id": 1,
+            "title": "Happy Sale",
+            "promotion_type": "Free delivery",
+            "start_date": "2021-07-01",
+            "end_date": "2021-07-14",
+            "active": True,
+
+        }
+        promotion = Promotion()
+        promotion.deserialize(data)
+        self.assertNotEqual(promotion, None)
+        self.assertEqual(promotion.id, None)
+        self.assertEqual(promotion.title, "Happy Sale")
+        self.assertEqual(promotion.promotion_type, "Free delivery")
+        self.assertEqual(promotion.start_date, "2021-07-01")
+        self.assertEqual(promotion.end_date, "2021-07-14")
+        self.assertEqual(promotion.active, True)
+
+    def test_deserialize_missing_data(self):
+        """ Test deserialization of a Promotion with missing data """
+        data = {"id": 1, "title": "Happy Sale", "promotion_type": "Free delivery"}
+        promotion = Promotion()
+        self.assertRaises(DataValidationError, promotion.deserialize, data)
+
+    def test_deserialize_bad_data(self):
+        """ Test deserialization of bad data """
+        data = "this is not a dictionary"
+        promotion = Promotion()
+        self.assertRaises(DataValidationError, promotion.deserialize, data)
+
+    
