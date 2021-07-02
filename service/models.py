@@ -127,17 +127,17 @@ class Promotion(db.Model):
         """ Finds a Promotion by it's ID """
         logger.info("Processing lookup for id %s ...", promotion_id)
         return cls.query.get(promotion_id)
-        
+
     @classmethod
-    def find_or_404(cls, pet_id):
-        """Find a Pet by it's id
+    def find_or_404(cls, promotion_id):
+        """Find a Promotion by it's id
 
-        :param pet_id: the id of the Pet to find
-        :type pet_id: int
+        :param promotion_id: the id of the Promotion to find
+        :type promotion_id: int
 
-        :return: an instance with the pet_id, or 404_NOT_FOUND if not found
-        :rtype: Pet
+        :return: an instance with the promotion_id, or 404_NOT_FOUND if not found
+        :rtype: Promotion
 
         """
-        logger.info("Processing lookup or 404 for id %s ...", pet_id)
-        return cls.query.get_or_404(pet_id)
+        logger.info("Processing lookup or 404 for id %s ...", promotion_id)
+        return cls.query.get_or_404(promotion_id)
