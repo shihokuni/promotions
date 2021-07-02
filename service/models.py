@@ -57,6 +57,18 @@ class Promotion(db.Model):
     end_date = db.Column(db.DateTime(), nullable=False)
     active = db.Column(db.Boolean(), nullable=False, default=False)
 
+    def __repr__(self):
+        return "<Promotion %r id=[%s]>" % (self.title, self.id)
+
+    def create(self):
+        """
+        Creates a Promotion to the database
+        """
+        logger.info("Creating %s", self.title)
+        self.id = None  # id must be none to generate next primary key
+        db.session.add(self)
+        db.session.commit()
+
 
 
     def serialize(self):
@@ -84,7 +96,7 @@ class Promotion(db.Model):
         try:
             self.title = data["title"]
             self.promotion_type = data["promotion_type"]
-            self.start_date= data["available"]
+            self.start_date= data["start_date"]
             self.end_date = data["end_date"]  
             self.active = data["active"] 
         except KeyError as error:
@@ -113,3 +125,15 @@ class Promotion(db.Model):
         db.init_app(app)
         app.app_context().push()
         db.create_all()  # make our sqlalchemy tables
+
+    @classmethod
+    def all(cls):
+        """ Returns all of the Promotions in the database """
+        logger.info("Processing all Promotions")
+        return cls.query.all()
+
+    @classmethod
+    def find(cls, promotion_id):
+        """ Finds a Promotion by it's ID """
+        logger.info("Processing lookup for id %s ...", promotion_id)
+        return cls.query.get(promotion_id)
