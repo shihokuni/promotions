@@ -1,16 +1,12 @@
 """
 Models for Promotion Service
-
 All of the models are stored in this module
-
 Models
 ------
 Promotion - A Promotion is a representation of a special promotion 
 or sale that is running against a product or perhaps the entire store
-
 Attributes
 -----------
-
 """
 
 import logging
@@ -39,7 +35,6 @@ class DataValidationError(Exception):
 class Promotion(db.Model):
     """
     Class that represents a Promotion
-
     This version uses a relational database for persistence which is hidden
     from us by SQLAlchemy's object relational mappings (ORM)
     """
@@ -57,6 +52,18 @@ class Promotion(db.Model):
     end_date = db.Column(db.DateTime(), nullable=False)
     active = db.Column(db.Boolean(), nullable=False, default=False)
 
+    def __repr__(self):
+        return "<Promotion %r id=[%s]>" % (self.title, self.id)
+
+    def create(self):
+        """
+        Creates a Promotion to the database
+        """
+        logger.info("Creating %s", self.title)
+        self.id = None  # id must be none to generate next primary key
+        db.session.add(self)
+        db.session.commit()
+
 
 
     def serialize(self):
@@ -73,18 +80,15 @@ class Promotion(db.Model):
     def deserialize(self, data):
         """
         Deserializes a Promotion from a dictionary
-
         :param data: a dictionary of attributes
         :type data: dict
-
         :return: a reference to self
         :rtype: Promotion
-
         """
         try:
             self.title = data["title"]
             self.promotion_type = data["promotion_type"]
-            self.start_date= data["available"]
+            self.start_date= data["start_date"]
             self.end_date = data["end_date"]  
             self.active = data["active"] 
         except KeyError as error:
@@ -102,10 +106,8 @@ class Promotion(db.Model):
     @classmethod
     def init_db(cls, app):
         """Initializes the database session
-
         :param app: the Flask app
         :type data: Flask
-
         """
         logger.info("Initializing database")
         cls.app = app
@@ -113,3 +115,29 @@ class Promotion(db.Model):
         db.init_app(app)
         app.app_context().push()
         db.create_all()  # make our sqlalchemy tables
+
+    @classmethod
+    def all(cls):
+        """ Returns all of the Promotions in the database """
+        logger.info("Processing all Promotions")
+        return cls.query.all()
+
+    @classmethod
+    def find(cls, promotion_id):
+        """ Finds a Promotion by it's ID """
+        logger.info("Processing lookup for id %s ...", promotion_id)
+        return cls.query.get(promotion_id)
+        
+    @classmethod
+    def find_or_404(cls, pet_id):
+        """Find a Pet by it's id
+
+        :param pet_id: the id of the Pet to find
+        :type pet_id: int
+
+        :return: an instance with the pet_id, or 404_NOT_FOUND if not found
+        :rtype: Pet
+
+        """
+        logger.info("Processing lookup or 404 for id %s ...", pet_id)
+        return cls.query.get_or_404(pet_id)

@@ -1,6 +1,5 @@
 """
 Promotion  Service
-
 Paths:
 ------
 GET /promotions - Returns a list all of the Promotions
@@ -53,13 +52,18 @@ def list_promotions():
 ######################################################################
 # RETRIEVE A PROMOTION
 ######################################################################
-@app.route("/promotions/<int:Promotion_id>", methods=["GET"])
+@app.route("/promotions/<int:promotion_id>", methods=["GET"])
 def get_promotions(promotion_id):
     """
     Retrieve a single Promotion
-
     This endpoint will return a Promotion based on it's id
     """
+    app.logger.info("Request for promotion with id: %s", promotion_id)
+    promotion = Promotion.find(promotion_id)
+    if not promotion:
+        raise NotFound("Promotion with id '{}' was not found.".format(promotion_id))
+    return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)
+
 
 
 ######################################################################
@@ -71,6 +75,16 @@ def create_promotions():
     Creates a Promotion
     This endpoint will create a Promotion based the data in the body that is posted
     """
+    app.logger.info("Request to create a promotion")
+    check_content_type("application/json")
+    promotion = Promotion()
+    promotion.deserialize(request.get_json())
+    promotion.create()
+    message = promotion.serialize()
+    location_url = url_for("get_promotions", promotion_id=promotion.id, _external=True)
+    return make_response(
+        jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
+    )
 
 
 ######################################################################
@@ -80,7 +94,6 @@ def create_promotions():
 def update_promotions(promotion_id):
     """
     Update a Promotion
-
     This endpoint will update a Promotion based the body that is posted
     """
 
@@ -92,7 +105,6 @@ def update_promotions(promotion_id):
 def delete_promotions(promotion_id):
     """
     Delete a Promotion
-
     This endpoint will delete a Promotion based the id specified in the path
     """
 
@@ -104,7 +116,6 @@ def delete_promotions(promotion_id):
 def activate_promotions(promotion_id):
     """
     Activate a Promotion
-
     This endpoint will activate a Promotion based on the id specified in the path
     """
 
@@ -116,7 +127,23 @@ def activate_promotions(promotion_id):
 def deactivate_promotions(promotion_id):
     """
     Deactivate a Promotion
-
     This endpoint will deactivate a Promotion based on the id specified in the path
     """
 
+######################################################################
+#  U T I L I T Y   F U N C T I O N S
+######################################################################
+
+
+def init_db():
+    """ Initialies the SQLAlchemy app """
+    global app
+    Promotion.init_db(app)
+
+
+def check_content_type(content_type):
+    """ Checks that the media type is correct """
+    if "Content-Type" in request.headers and request.headers["Content-Type"] == content_type:
+        return
+    app.logger.error("Invalid Content-Type: [%s]", request.headers.get("Content-Type"))
+    abort(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, "Content-Type must be {}".format(content_type))
