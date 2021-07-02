@@ -55,4 +55,4 @@ class Promotion(db.Model):
     promotion_type = db.Column(db.String(63), nullable=False)
     start_date = db.Column(db.DateTime(), nullable=False)
     end_date = db.Column(db.DateTime(), nullable=False)
-   
+    status = db.Column(db.String(63), nullable=True)
