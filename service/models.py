@@ -78,7 +78,7 @@ class Promotion(db.Model):
         :type data: dict
 
         :return: a reference to self
-        :rtype: Pet
+        :rtype: Promotion
 
         """
         try:
