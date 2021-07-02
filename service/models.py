@@ -55,24 +55,24 @@ class Promotion(db.Model):
     promotion_type = db.Column(db.String(63), nullable=False)
     start_date = db.Column(db.DateTime(), nullable=False)
     end_date = db.Column(db.DateTime(), nullable=False)
-    status = db.Column(db.String(63), nullable=True)
+    active = db.Column(db.Boolean(), nullable=False, default=False)
 
 
 
     def serialize(self):
-        """Serializes a Pet into a dictionary"""
+        """Serializes a Promotion into a dictionary"""
         return {
             "id": self.id,
             "title": self.title,
             "promotion_type": self.promotion_type,
             "start_date": self.start_date,
             "end_date": self.end_date, 
-            "status": self.status, 
+            "active": self.active, 
         }
 
     def deserialize(self, data):
         """
-        Deserializes a Pet from a dictionary
+        Deserializes a Promotion from a dictionary
 
         :param data: a dictionary of attributes
         :type data: dict
@@ -86,7 +86,7 @@ class Promotion(db.Model):
             self.promotion_type = data["promotion_type"]
             self.start_date= data["available"]
             self.end_date = data["end_date"]  
-            self.status = data["status"] 
+            self.active = data["active"] 
         except KeyError as error:
             raise DataValidationError("Invalid promotion: missing " + error.args[0])
         except TypeError as error:
