@@ -210,6 +210,13 @@ class TestPromotionServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_promotion = resp.get_json()
         self.assertEqual(updated_promotion["active"], True)
+        resp = self.app.put(
+            "/promotions/{}/activate".format(new_promotion["id"]+1),
+            json=new_promotion,
+            content_type=CONTENT_TYPE_JSON,
+        )
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
 
     def test_deactivate_promotion(self):
         """Deactivate an existing Promotion"""
@@ -233,6 +240,13 @@ class TestPromotionServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_promotion = resp.get_json()
         self.assertEqual(updated_promotion["active"], False)
+
+        resp = self.app.put(
+            "/promotions/{}/deactivate".format(new_promotion["id"]+1),
+            json=new_promotion,
+            content_type=CONTENT_TYPE_JSON,
+        )
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_promotion(self):
         """Delete a Promotion"""
