@@ -27,6 +27,8 @@ DATABASE_URI = os.getenv(
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
+
+
 class TestPromotionServer(unittest.TestCase):
     """ Promotion Server Tests """
 
@@ -76,7 +78,14 @@ class TestPromotionServer(unittest.TestCase):
         data = resp.get_json()
         self.assertEqual(data["name"], "Promotion REST API Service")
 
-
+    def test_get_promotion_list(self):
+        """ Get a list of Promotions """
+        self._create_promotions(5)
+        resp = self.app.get("/promotions")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), 5)
+    
     def test_get_promotion(self):
         """ Get a single Promotion """
         # get the id of a promotion
@@ -106,29 +115,35 @@ class TestPromotionServer(unittest.TestCase):
         self.assertIsNotNone(location)
         # Check the data is correct
         new_promotion = resp.get_json()
-        self.assertEqual(new_promotion["title"], test_promotion.title, "Title do not match")
+        self.assertEqual(new_promotion["title"],
+                         test_promotion.title, "Title do not match")
         self.assertEqual(
             new_promotion["promotion_type"], test_promotion.promotion_type, "Promotion Type do not match"
         )
         self.assertEqual(
-            parser.parse(new_promotion["start_date"]).strftime('%Y-%m-%d'), test_promotion.start_date, "Start date does not match"
+            parser.parse(new_promotion["start_date"]).strftime(
+                '%Y-%m-%d'), test_promotion.start_date, "Start date does not match"
         )
         self.assertEqual(
-            parser.parse(new_promotion["end_date"]).strftime('%Y-%m-%d'), test_promotion.end_date, "End date does not match"
+            parser.parse(new_promotion["end_date"]).strftime(
+                '%Y-%m-%d'), test_promotion.end_date, "End date does not match"
         )
         # Check that the location header was correct
         resp = self.app.get(location, content_type="application/json")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         new_promotion = resp.get_json()
-        self.assertEqual(new_promotion["title"], test_promotion.title, "Title do not match")
+        self.assertEqual(new_promotion["title"],
+                         test_promotion.title, "Title do not match")
         self.assertEqual(
             new_promotion["promotion_type"], test_promotion.promotion_type, "Promotion Type do not match"
         )
         self.assertEqual(
-            parser.parse(new_promotion["start_date"]).strftime('%Y-%m-%d'), test_promotion.start_date, "Start date does not match"
+            parser.parse(new_promotion["start_date"]).strftime(
+                '%Y-%m-%d'), test_promotion.start_date, "Start date does not match"
         )
         self.assertEqual(
-            parser.parse(new_promotion["end_date"]).strftime('%Y-%m-%d'), test_promotion.end_date, "End date does not match"
+            parser.parse(new_promotion["end_date"]).strftime(
+                '%Y-%m-%d'), test_promotion.end_date, "End date does not match"
         )
 
     def test_create_promotion_no_data(self):
@@ -141,4 +156,5 @@ class TestPromotionServer(unittest.TestCase):
     def test_create_promotion_no_content_type(self):
         """ Create a Promotion with no content type """
         resp = self.app.post("/promotions")
-        self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        self.assertEqual(resp.status_code,
+                         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
