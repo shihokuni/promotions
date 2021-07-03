@@ -75,6 +75,66 @@ class TestPromotionModel(unittest.TestCase):
         promotions = Promotion.all()
         self.assertEqual(len(promotions), 1)
 
+    def test_update_a_promotion(self):
+        """Update a Promotion"""
+        promotion = PromotionFactory()
+        logging.debug(promotion)
+        promotion.create()
+        logging.debug(promotion)
+        self.assertEqual(promotion.id, 1)
+        # Change it an save it
+        promotion.title = "test"
+        original_id = promotion.id
+        promotion.update()
+        self.assertEqual(promotion.id, original_id)
+        self.assertEqual(promotion.title, "test")
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        promotions = Promotion.all()
+        self.assertEqual(len(promotions), 1)
+        self.assertEqual(promotions[0].id, 1)
+        self.assertEqual(promotions[0].title, "test")
+        
+    # def test_activate_a_promotion(self):
+    #     """Activate a Promotion"""
+    #     promotion = PromotionFactory()
+        
+    #     promotion.create()
+        
+    #     self.assertEqual(len(Promotion.all()), 1)
+    #     # Change it an save it
+    #     promotion.active = True
+    #     original_active = promotion.active
+    #     original_id = promotion.id
+    #     promotion.update()
+    #     self.assertEqual(promotion.active, original_active)
+        
+    #     # Fetch it back and make sure the id hasn't changed
+    #     # but the data did change
+    #     promotions = Promotion.all()
+    #     self.assertEqual(len(promotions), 1)
+    #     self.assertEqual(promotions[0].active, original_active)
+    #     self.assertEqual(promotions[0].id, original_id)
+    # def test_deactivate_a_promotion(self):
+    #     """Deactivate a Promotion"""
+    #     promotion = PromotionFactory()
+        
+    #     promotion.create()
+        
+    #     self.assertEqual(len(Promotion.all()), 1)
+    #     # Change it an save it
+    #     promotion.active = False
+    #     original_active = promotion.active
+    #     original_id = promotion.id
+    #     promotion.update()
+    #     self.assertEqual(promotion.active, original_active)
+        
+    #     # Fetch it back and make sure the id hasn't changed
+    #     # but the data did change
+    #     promotions = Promotion.all()
+    #     self.assertEqual(len(promotions), 1)
+    #     self.assertEqual(promotions[0].active, original_active)
+    #     self.assertEqual(promotions[0].id, original_id)
     def test_delete_a_promotion(self):
         """Delete a Promotion"""
         promotion = PromotionFactory()

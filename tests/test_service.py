@@ -143,6 +143,79 @@ class TestPromotionServer(unittest.TestCase):
         """ Create a Promotion with no content type """
         resp = self.app.post("/promotions")
         self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+    def test_update_promotion(self):
+        """Update an existing Promotion"""
+        # create a promotion to update
+        test_promotion = PromotionFactory()
+        resp = self.app.post(
+            BASE_URL, json=test_promotion.serialize(), content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # update the promotion
+        new_promotion = resp.get_json()
+        logging.debug(new_promotion)
+        new_promotion["title"] = "unknown"
+        resp = self.app.put(
+            "/promotions/{}".format(new_promotion["id"]),
+            json=new_promotion,
+            content_type=CONTENT_TYPE_JSON,
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        updated_promotion = resp.get_json()
+        self.assertEqual(updated_promotion["title"], "unknown")
+        
+        resp = self.app.put(
+            "/promotions/{}".format(new_promotion["id"]+1),
+            json=new_promotion,
+            content_type=CONTENT_TYPE_JSON,
+        )
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+              
+    def test_activate_promotion(self):
+        """Activate an existing Promotion"""
+        # create a promotion to update
+        test_promotion = PromotionFactory()
+        resp = self.app.post(
+            BASE_URL, json=test_promotion.serialize(), content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        # update the promotion
+        new_promotion = resp.get_json()
+        logging.debug(new_promotion)
+        new_promotion["active"]=False
+        self.assertEqual(new_promotion["active"], False)
+        resp = self.app.put(
+            "/promotions/{}/activate".format(new_promotion["id"]),
+            json=new_promotion,
+            content_type=CONTENT_TYPE_JSON,
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        updated_promotion = resp.get_json()
+        self.assertEqual(updated_promotion["active"], True)
+
+    def test_deactivate_promotion(self):
+        """Deactivate an existing Promotion"""
+        # create a promotion to update
+        test_promotion = PromotionFactory()
+        resp = self.app.post(
+            BASE_URL, json=test_promotion.serialize(), content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # update the promotion
+        new_promotion = resp.get_json()
+        logging.debug(new_promotion)
+        new_promotion["active"]=True
+        self.assertEqual(new_promotion["active"], True)
+        resp = self.app.put(
+            "/promotions/{}/deactivate".format(new_promotion["id"]),
+            json=new_promotion,
+            content_type=CONTENT_TYPE_JSON,
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        updated_promotion = resp.get_json()
+        self.assertEqual(updated_promotion["active"], False)
 
     def test_delete_promotion(self):
         """Delete a Promotion"""
