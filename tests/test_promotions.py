@@ -13,6 +13,7 @@ from werkzeug.exceptions import NotFound
 from service.models import Promotion, DataValidationError, db
 from service import app
 from .factories import PromotionFactory
+from dateutil import parser
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgres://postgres:postgres@localhost:5432/postgres"
@@ -149,6 +150,17 @@ class TestPromotionModel(unittest.TestCase):
         self.assertEqual(promotion.promotion_type, promotions[1].promotion_type)
         self.assertEqual(promotion.start_date, promotions[1].start_date)
         self.assertEqual(promotion.end_date, promotions[1].end_date)   
+    
+    def test_find_by_promotion_type(self):
+        """Find a Promotion by promotion_type"""
+        Promotion(title="Summer Sale", promotion_type="10%OFF", start_date="2021-07-01", end_date="2021-08-31",active=True).create()
+        Promotion(title="Winter Sale", promotion_type="20%OFF", start_date="2021-12-01", end_date="2021-12-31",active=False).create()
+        promotions = Promotion.find_by_promotiontype("20%OFF")
+        self.assertEqual(promotions[0].title, "Winter Sale")
+        self.assertEqual(promotions[0].promotion_type, "20%OFF")
+        self.assertEqual(promotions[0].start_date.strftime('%Y-%m-%d'), "2021-12-01")
+        self.assertEqual(promotions[0].end_date.strftime('%Y-%m-%d'), "2021-12-31")
+        self.assertEqual(promotions[0].active, False)
     
     def test_find_or_404_found(self):
         """Find or return 404 found"""

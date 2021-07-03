@@ -16,7 +16,6 @@ from service import status  # HTTP Status Codes
 from service.models import db
 from service.routes import app, init_db
 from .factories import PromotionFactory
-from datetime import datetime as dt
 from dateutil import parser
 
 # DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///../db/test.db')
