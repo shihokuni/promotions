@@ -103,7 +103,7 @@ def delete_promotions(promotion_id):
     This endpoint will delete a Promotion based the id specified in the path
     """
     app.logger.info("Request to delete promotion with id: %s", promotion_id)
-    promotion = Pet.find(promotion_id)
+    promotion = Promotion.find(promotion_id)
     if promotion:
         promotion.delete()
 
