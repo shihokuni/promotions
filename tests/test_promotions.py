@@ -75,6 +75,14 @@ class TestPromotionModel(unittest.TestCase):
         promotions = Promotion.all()
         self.assertEqual(len(promotions), 1)
 
+    def test_delete_a_promotion(self):
+        """Delete a Promotion"""
+        promotion = PromotionFactory()
+        promotion.create()
+        self.assertEqual(len(Promotion.all()), 1)
+        # delete the promotion and make sure it isn't in the database
+        promotion.delete()
+        self.assertEqual(len(Promotion.all()), 0)
 
     def test_serialize_a_promotion(self):
         """ Test serialization of a Promotion """

@@ -64,6 +64,12 @@ class Promotion(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def delete(self):
+        """Removes a Pet from the data store"""
+        logger.info("Deleting %s", self.title)
+        db.session.delete(self)
+        db.session.commit()
+
 
 
     def serialize(self):

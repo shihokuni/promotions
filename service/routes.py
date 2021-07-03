@@ -102,7 +102,13 @@ def delete_promotions(promotion_id):
     Delete a Promotion
     This endpoint will delete a Promotion based the id specified in the path
     """
+    app.logger.info("Request to delete promotion with id: %s", promotion_id)
+    promotion = Promotion.find(promotion_id)
+    if promotion:
+        promotion.delete()
 
+    app.logger.info("Promotion with ID [%s] delete complete.", promotion_id)
+    return make_response("", status.HTTP_204_NO_CONTENT)
 ######################################################################
 # ACTIVATE AN EXISTING PROMOTION
 ######################################################################
