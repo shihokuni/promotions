@@ -40,14 +40,13 @@ def index():
         ),
         status.HTTP_200_OK,
     )
-
+  
 ######################################################################
 # LIST ALL PROMOTIONS
 ######################################################################
 @app.route("/promotions", methods=["GET"])
 def list_promotions():
     """ Returns all of the Promotions """
-
 
 ######################################################################
 # RETRIEVE A PROMOTION
@@ -63,8 +62,6 @@ def get_promotions(promotion_id):
     if not promotion:
         raise NotFound("Promotion with id '{}' was not found.".format(promotion_id))
     return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)
-
-
 
 ######################################################################
 # ADD A NEW PROMOTION
@@ -86,7 +83,6 @@ def create_promotions():
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
 
-
 ######################################################################
 # UPDATE AN EXISTING PROMOTION
 ######################################################################
@@ -96,7 +92,6 @@ def update_promotions(promotion_id):
     Update a Promotion
     This endpoint will update a Promotion based the body that is posted
     """
-
 
 ######################################################################
 # DELETE A PROMOTION
@@ -108,7 +103,6 @@ def delete_promotions(promotion_id):
     This endpoint will delete a Promotion based the id specified in the path
     """
 
-
 ######################################################################
 # ACTIVATE AN EXISTING PROMOTION
 ######################################################################
@@ -118,7 +112,6 @@ def activate_promotions(promotion_id):
     Activate a Promotion
     This endpoint will activate a Promotion based on the id specified in the path
     """
-
 
 ######################################################################
 # DEACTIVATE AN EXISTING PROMOTION
@@ -133,8 +126,6 @@ def deactivate_promotions(promotion_id):
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
-
-
 def init_db():
     """ Initialies the SQLAlchemy app """
     global app
@@ -147,3 +138,4 @@ def check_content_type(content_type):
         return
     app.logger.error("Invalid Content-Type: [%s]", request.headers.get("Content-Type"))
     abort(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, "Content-Type must be {}".format(content_type))
+

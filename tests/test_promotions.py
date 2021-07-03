@@ -158,4 +158,4 @@ class TestPromotionModel(unittest.TestCase):
 
     def test_find_or_404_not_found(self):
         """Find or return 404 NOT found"""
-        self.assertRaises(NotFound, Promotion.find_or_404, 0)    
+        self.assertRaises(NotFound, Promotion.find_or_404, 0)

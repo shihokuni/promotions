@@ -41,7 +41,6 @@ class TestPromotionServer(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """ """
         pass
 
     def setUp(self):
