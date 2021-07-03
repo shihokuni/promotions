@@ -114,7 +114,17 @@ def update_promotions(promotion_id):
     Update a Promotion
     This endpoint will update a Promotion based the body that is posted
     """
+    app.logger.info("Request to update promotion with id: %s", promotion_id)
+    check_content_type("application/json")
+    promotion = Promotion.find(promotion_id)
+    if not promotion:
+        raise NotFound("Promotion with id '{}' was not found.".format(promotion_id))
+    promotion.deserialize(request.get_json())
+    promotion.id = promotion_id
+    promotion.update()
 
+    app.logger.info("Promotion with ID [%s] updated.", promotion.id)
+    return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)
 ######################################################################
 # DELETE A PROMOTION
 ######################################################################
@@ -144,6 +154,18 @@ def activate_promotions(promotion_id):
     Activate a Promotion
     This endpoint will activate a Promotion based on the id specified in the path
     """
+    app.logger.info("Request to activate promotion with id: %s", promotion_id)
+
+    check_content_type("application/json")
+
+    promotion=Promotion.find(promotion_id)
+    if not promotion:
+        raise NotFound("Promotion with id '{}' was not found.".format(promotion_id))
+    promotion.active=True
+    promotion.update()
+
+    app.logger.info("Promotion with ID [%s] updated.", promotion.id)
+    return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)    
 
 ######################################################################
 # DEACTIVATE AN EXISTING PROMOTION
@@ -156,7 +178,18 @@ def deactivate_promotions(promotion_id):
     Deactivate a Promotion
     This endpoint will deactivate a Promotion based on the id specified in the path
     """
+    app.logger.info("Request to deactivate promotion with id: %s", promotion_id)
 
+    check_content_type("application/json")
+
+    promotion=Promotion.find(promotion_id)
+    if not promotion:
+        raise NotFound("Promotion with id '{}' was not found.".format(promotion_id))
+    promotion.active=False
+    promotion.update()
+
+    app.logger.info("Promotion with ID [%s] updated.", promotion.id)
+    return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)    
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################

@@ -68,6 +68,15 @@ class Promotion(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+
+    def update(self):
+        """
+        Updates a Promotion to the database
+        """
+        logger.info("Updating %s", self.title)
+        db.session.commit()
+
+
     def serialize(self):
         """Serializes a Promotion into a dictionary"""
         return {
