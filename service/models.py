@@ -30,8 +30,6 @@ class DataValidationError(Exception):
     pass
 
 
-
-
 class Promotion(db.Model):
     """
     Class that represents a Promotion
@@ -70,12 +68,14 @@ class Promotion(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+
     def update(self):
         """
         Updates a Promotion to the database
         """
         logger.info("Updating %s", self.title)
         db.session.commit()
+
 
     def serialize(self):
         """Serializes a Promotion into a dictionary"""
@@ -84,8 +84,8 @@ class Promotion(db.Model):
             "title": self.title,
             "promotion_type": self.promotion_type,
             "start_date": self.start_date,
-            "end_date": self.end_date, 
-            "active": self.active, 
+            "end_date": self.end_date,
+            "active": self.active,
         }
 
     def deserialize(self, data):
@@ -99,11 +99,12 @@ class Promotion(db.Model):
         try:
             self.title = data["title"]
             self.promotion_type = data["promotion_type"]
-            self.start_date= data["start_date"]
-            self.end_date = data["end_date"]  
-            self.active = data["active"] 
+            self.start_date = data["start_date"]
+            self.end_date = data["end_date"]
+            self.active = data["active"]
         except KeyError as error:
-            raise DataValidationError("Invalid promotion: missing " + error.args[0])
+            raise DataValidationError(
+                "Invalid promotion: missing " + error.args[0])
         except TypeError as error:
             raise DataValidationError(
                 "Invalid promotion: body of request contained bad or no data"
@@ -152,4 +153,15 @@ class Promotion(db.Model):
         """
         logger.info("Processing lookup or 404 for id %s ...", promotion_id)
         return cls.query.get_or_404(promotion_id)
+
+    @classmethod
+    def find_by_promotiontype(cls, promotion_type):
+        """Returns all Promotions with the given promotion_type
+
+        Args:
+            promotion_type (string): the promotion_type of the Promotions you want to match
+        """
+        logger.info("Processing promotion_type query for %s ...",
+                    promotion_type)
+        return cls.query.filter(cls.promotion_type == promotion_type)
 
