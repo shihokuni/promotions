@@ -1,13 +1,10 @@
 """
 Test cases for Promotion Model
-
 Test cases can be run with:
     nosetests
     coverage report -m
-
 While debugging just these tests it's convinient to use this:
     nosetests --stop tests/test_promotionss.py:TestPromotionModel
-
 """
 import os
 import logging
@@ -128,4 +125,37 @@ class TestPromotionModel(unittest.TestCase):
         promotion = Promotion()
         self.assertRaises(DataValidationError, promotion.deserialize, data)
 
+    def test_find_promotion(self):
+        """Find a Promotion by ID"""
+        promotions = PromotionFactory.create_batch(3)
+        for promotion in promotions:
+            promotion.create()
+        logging.debug(promotions)
+        # make sure they got saved
+        self.assertEqual(len(promotion.all()), 3)
+        # find the 2nd promotion in the list
+        promotion = Promotion.find(promotions[1].id)
+        self.assertIsNot(promotion, None)
+        self.assertEqual(promotion.id, promotions[1].id)
+        self.assertEqual(promotion.title, promotions[1].title)
+        self.assertEqual(promotion.promotion_type, promotions[1].promotion_type)
+        self.assertEqual(promotion.start_date, promotions[1].start_date)
+        self.assertEqual(promotion.end_date, promotions[1].end_date)   
     
+    def test_find_or_404_found(self):
+        """Find or return 404 found"""
+        promotions = PromotionFactory.create_batch(3)
+        for promotion in promotions:
+            promotion.create()
+
+        promotion = Promotion.find_or_404(promotions[1].id)
+        self.assertIsNot(promotion, None)
+        self.assertEqual(promotion.id, promotions[1].id)
+        self.assertEqual(promotion.title, promotions[1].title)
+        self.assertEqual(promotion.promotion_type, promotions[1].promotion_type)
+        self.assertEqual(promotion.start_date, promotions[1].start_date)
+        self.assertEqual(promotion.end_date, promotions[1].end_date)
+
+    def test_find_or_404_not_found(self):
+        """Find or return 404 NOT found"""
+        self.assertRaises(NotFound, Promotion.find_or_404, 0)
