@@ -51,11 +51,14 @@ def index():
 @app.route("/promotions", methods=["GET"])
 def list_promotions():
     """ Returns all of the Promotions """
-    app.logger.info("Request for promotion list")   
+    app.logger.info("Request for promotion list")
     promotions = []
     promotion_type = request.args.get("promotion_type")
+    active = request.args.get("active")
     if promotion_type:
         promotions = Promotion.find_by_promotiontype(promotion_type)
+    elif active:
+        promotions = Promotion.find_by_active(active)
     else:
         promotions = Promotion.all()
 
@@ -118,13 +121,15 @@ def update_promotions(promotion_id):
     check_content_type("application/json")
     promotion = Promotion.find(promotion_id)
     if not promotion:
-        raise NotFound("Promotion with id '{}' was not found.".format(promotion_id))
+        raise NotFound(
+            "Promotion with id '{}' was not found.".format(promotion_id))
     promotion.deserialize(request.get_json())
     promotion.id = promotion_id
     promotion.update()
 
     app.logger.info("Promotion with ID [%s] updated.", promotion.id)
     return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)
+
 ######################################################################
 # DELETE A PROMOTION
 ######################################################################
@@ -143,6 +148,7 @@ def delete_promotions(promotion_id):
 
     app.logger.info("Promotion with ID [%s] delete complete.", promotion_id)
     return make_response("", status.HTTP_204_NO_CONTENT)
+
 ######################################################################
 # ACTIVATE AN EXISTING PROMOTION
 ######################################################################
@@ -158,14 +164,15 @@ def activate_promotions(promotion_id):
 
     check_content_type("application/json")
 
-    promotion=Promotion.find(promotion_id)
+    promotion = Promotion.find(promotion_id)
     if not promotion:
-        raise NotFound("Promotion with id '{}' was not found.".format(promotion_id))
-    promotion.active=True
+        raise NotFound(
+            "Promotion with id '{}' was not found.".format(promotion_id))
+    promotion.active = True
     promotion.update()
 
     app.logger.info("Promotion with ID [%s] updated.", promotion.id)
-    return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)    
+    return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)
 
 ######################################################################
 # DEACTIVATE AN EXISTING PROMOTION
@@ -178,18 +185,21 @@ def deactivate_promotions(promotion_id):
     Deactivate a Promotion
     This endpoint will deactivate a Promotion based on the id specified in the path
     """
-    app.logger.info("Request to deactivate promotion with id: %s", promotion_id)
+    app.logger.info(
+        "Request to deactivate promotion with id: %s", promotion_id)
 
     check_content_type("application/json")
 
-    promotion=Promotion.find(promotion_id)
+    promotion = Promotion.find(promotion_id)
     if not promotion:
-        raise NotFound("Promotion with id '{}' was not found.".format(promotion_id))
-    promotion.active=False
+        raise NotFound(
+            "Promotion with id '{}' was not found.".format(promotion_id))
+    promotion.active = False
     promotion.update()
 
     app.logger.info("Promotion with ID [%s] updated.", promotion.id)
-    return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)    
+    return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)
+
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################

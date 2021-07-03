@@ -99,7 +99,6 @@ class TestPromotionModel(unittest.TestCase):
         self.assertEqual(len(promotions), 1)
         self.assertEqual(promotions[0].id, 1)
         self.assertEqual(promotions[0].title, "test")
-        
 
     def test_delete_a_promotion(self):
         """Delete a Promotion"""
@@ -176,19 +175,38 @@ class TestPromotionModel(unittest.TestCase):
         self.assertEqual(promotion.promotion_type,
                          promotions[1].promotion_type)
         self.assertEqual(promotion.start_date, promotions[1].start_date)
-        self.assertEqual(promotion.end_date, promotions[1].end_date)   
-    
+        self.assertEqual(promotion.end_date, promotions[1].end_date)
+
     def test_find_by_promotion_type(self):
         """Find a Promotion by promotion_type"""
-        Promotion(title="Summer Sale", promotion_type="10%OFF", start_date="2021-07-01", end_date="2021-08-31",active=True).create()
-        Promotion(title="Winter Sale", promotion_type="20%OFF", start_date="2021-12-01", end_date="2021-12-31",active=False).create()
+        Promotion(title="Summer Sale", promotion_type="10%OFF",
+                  start_date="2021-07-01", end_date="2021-08-31", active=True).create()
+        Promotion(title="Winter Sale", promotion_type="20%OFF",
+                  start_date="2021-12-01", end_date="2021-12-31", active=False).create()
         promotions = Promotion.find_by_promotiontype("20%OFF")
         self.assertEqual(promotions[0].title, "Winter Sale")
         self.assertEqual(promotions[0].promotion_type, "20%OFF")
-        self.assertEqual(promotions[0].start_date.strftime('%Y-%m-%d'), "2021-12-01")
-        self.assertEqual(promotions[0].end_date.strftime('%Y-%m-%d'), "2021-12-31")
+        self.assertEqual(promotions[0].start_date.strftime(
+            '%Y-%m-%d'), "2021-12-01")
+        self.assertEqual(promotions[0].end_date.strftime(
+            '%Y-%m-%d'), "2021-12-31")
         self.assertEqual(promotions[0].active, False)
-    
+
+    def test_find_by_active(self):
+        """Find a Promotion by active"""
+        Promotion(title="Summer Sale", promotion_type="10%OFF",
+                  start_date="2021-07-01", end_date="2021-08-31", active=True).create()
+        Promotion(title="Winter Sale", promotion_type="20%OFF",
+                  start_date="2021-12-01", end_date="2021-12-31", active=False).create()
+        promotions = Promotion.find_by_active(False)
+        self.assertEqual(promotions[0].title, "Winter Sale")
+        self.assertEqual(promotions[0].promotion_type, "20%OFF")
+        self.assertEqual(promotions[0].start_date.strftime(
+            '%Y-%m-%d'), "2021-12-01")
+        self.assertEqual(promotions[0].end_date.strftime(
+            '%Y-%m-%d'), "2021-12-31")
+        self.assertEqual(promotions[0].active, False)
+
     def test_find_or_404_found(self):
         """Find or return 404 found"""
         promotions = PromotionFactory.create_batch(3)

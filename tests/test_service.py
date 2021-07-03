@@ -85,7 +85,7 @@ class TestPromotionServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertEqual(len(data), 5)
-    
+
     def test_get_promotion(self):
         """ Get a single Promotion """
         # get the id of a promotion
@@ -157,7 +157,9 @@ class TestPromotionServer(unittest.TestCase):
         """ Create a Promotion with no content type """
         resp = self.app.post("/promotions")
 
-        self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        self.assertEqual(resp.status_code,
+                         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
     def test_update_promotion(self):
         """Update an existing Promotion"""
         # create a promotion to update
@@ -179,14 +181,14 @@ class TestPromotionServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_promotion = resp.get_json()
         self.assertEqual(updated_promotion["title"], "unknown")
-        
+
         resp = self.app.put(
             "/promotions/{}".format(new_promotion["id"]+1),
             json=new_promotion,
             content_type=CONTENT_TYPE_JSON,
         )
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
-              
+
     def test_activate_promotion(self):
         """Activate an existing Promotion"""
         # create a promotion to update
@@ -198,7 +200,7 @@ class TestPromotionServer(unittest.TestCase):
         # update the promotion
         new_promotion = resp.get_json()
         logging.debug(new_promotion)
-        new_promotion["active"]=False
+        new_promotion["active"] = False
         self.assertEqual(new_promotion["active"], False)
         resp = self.app.put(
             "/promotions/{}/activate".format(new_promotion["id"]),
@@ -221,7 +223,7 @@ class TestPromotionServer(unittest.TestCase):
         # update the promotion
         new_promotion = resp.get_json()
         logging.debug(new_promotion)
-        new_promotion["active"]=True
+        new_promotion["active"] = True
         self.assertEqual(new_promotion["active"], True)
         resp = self.app.put(
             "/promotions/{}/deactivate".format(new_promotion["id"]),
@@ -231,7 +233,6 @@ class TestPromotionServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_promotion = resp.get_json()
         self.assertEqual(updated_promotion["active"], False)
-
 
     def test_delete_promotion(self):
         """Delete a Promotion"""
@@ -247,3 +248,32 @@ class TestPromotionServer(unittest.TestCase):
         )
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_query_promotion_list_by_promotion_type(self):
+        """Query Promotions by promotion_type"""
+        promotions = self._create_promotions(10)
+        test_promotion_type = promotions[0].promotion_type
+        promotion_type_promotions = [promotion for promotion in promotions if promotion.promotion_type == test_promotion_type]
+        resp = self.app.get(
+            BASE_URL, query_string="promotion_type={}".format(quote_plus(test_promotion_type))
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), len(promotion_type_promotions))
+        # check the data just to be sure
+        for promotion in data:
+            self.assertEqual(promotion["promotion_type"], test_promotion_type)
+    
+    def test_query_promotion_list_by_active(self):
+        """Query Promotions by Active"""
+        promotions = self._create_promotions(10)
+        test_active = promotions[0].active
+        active_promotions = [promotion for promotion in promotions if promotion.active == test_active]
+        resp = self.app.get(
+            BASE_URL, query_string="active={}".format(test_active)
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), len(active_promotions))
+        # check the data just to be sure
+        for promotion in data:
+            self.assertEqual(promotion["active"], test_active)

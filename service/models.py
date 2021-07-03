@@ -68,14 +68,12 @@ class Promotion(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-
     def update(self):
         """
         Updates a Promotion to the database
         """
         logger.info("Updating %s", self.title)
         db.session.commit()
-
 
     def serialize(self):
         """Serializes a Promotion into a dictionary"""
@@ -165,3 +163,13 @@ class Promotion(db.Model):
                     promotion_type)
         return cls.query.filter(cls.promotion_type == promotion_type)
 
+    @classmethod
+    def find_by_active(cls, active):
+        """Returns all Promotions with the given active
+
+            Args:
+                active (boolean): the active of the Promotions you want to match
+            """
+        logger.info("Processing active query for %s ...",
+                    active)
+        return cls.query.filter(cls.active == active)
