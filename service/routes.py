@@ -47,6 +47,16 @@ def index():
 @app.route("/promotions", methods=["GET"])
 def list_promotions():
     """ Returns all of the Promotions """
+    app.logger.info("Request for promotion list")   
+    promotions = []
+    promotion_type = request.args.get("promotion_type")
+    if promotion_type:
+        promotions = Promotion.find_by_promotiontype(promotion_type)
+    else:
+        promotions = Promotion.all()
+
+    results = [promotion.serialize() for promotion in promotions]
+    return make_response(jsonify(results), status.HTTP_200_OK)
 
 ######################################################################
 # RETRIEVE A PROMOTION
