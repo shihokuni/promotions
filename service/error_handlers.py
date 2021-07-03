@@ -6,6 +6,7 @@ from flask import jsonify
 from service.models import DataValidationError
 from . import app, status
 
+
 @app.errorhandler(DataValidationError)
 def request_validation_error(error):
     """ Handles Value Errors from bad data """
@@ -31,7 +32,8 @@ def not_found(error):
     message = str(error)
     app.logger.warning(message)
     return (
-        jsonify(status=status.HTTP_404_NOT_FOUND, error="Not Found", message=message),
+        jsonify(status=status.HTTP_404_NOT_FOUND,
+                error="Not Found", message=message),
         status.HTTP_404_NOT_FOUND,
     )
 
@@ -79,4 +81,3 @@ def internal_server_error(error):
         ),
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     )
-

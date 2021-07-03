@@ -29,6 +29,8 @@ from . import app
 ######################################################################
 # GET INDEX
 ######################################################################
+
+
 @app.route("/")
 def index():
     """ Root URL response """
@@ -40,10 +42,12 @@ def index():
         ),
         status.HTTP_200_OK,
     )
-  
+
 ######################################################################
 # LIST ALL PROMOTIONS
 ######################################################################
+
+
 @app.route("/promotions", methods=["GET"])
 def list_promotions():
     """ Returns all of the Promotions """
@@ -61,6 +65,8 @@ def list_promotions():
 ######################################################################
 # RETRIEVE A PROMOTION
 ######################################################################
+
+
 @app.route("/promotions/<int:promotion_id>", methods=["GET"])
 def get_promotions(promotion_id):
     """
@@ -70,12 +76,15 @@ def get_promotions(promotion_id):
     app.logger.info("Request for promotion with id: %s", promotion_id)
     promotion = Promotion.find(promotion_id)
     if not promotion:
-        raise NotFound("Promotion with id '{}' was not found.".format(promotion_id))
+        raise NotFound(
+            "Promotion with id '{}' was not found.".format(promotion_id))
     return make_response(jsonify(promotion.serialize()), status.HTTP_200_OK)
 
 ######################################################################
 # ADD A NEW PROMOTION
 ######################################################################
+
+
 @app.route("/promotions", methods=["POST"])
 def create_promotions():
     """
@@ -88,7 +97,8 @@ def create_promotions():
     promotion.deserialize(request.get_json())
     promotion.create()
     message = promotion.serialize()
-    location_url = url_for("get_promotions", promotion_id=promotion.id, _external=True)
+    location_url = url_for(
+        "get_promotions", promotion_id=promotion.id, _external=True)
     return make_response(
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
@@ -96,6 +106,8 @@ def create_promotions():
 ######################################################################
 # UPDATE AN EXISTING PROMOTION
 ######################################################################
+
+
 @app.route("/promotions/<int:promotion_id>", methods=["PUT"])
 def update_promotions(promotion_id):
     """
@@ -106,6 +118,8 @@ def update_promotions(promotion_id):
 ######################################################################
 # DELETE A PROMOTION
 ######################################################################
+
+
 @app.route("/promotions/<int:promotion_id>", methods=["DELETE"])
 def delete_promotions(promotion_id):
     """
@@ -122,6 +136,8 @@ def delete_promotions(promotion_id):
 ######################################################################
 # ACTIVATE AN EXISTING PROMOTION
 ######################################################################
+
+
 @app.route("/promotions/<int:promotion_id>/activate", methods=["PUT"])
 def activate_promotions(promotion_id):
     """
@@ -132,6 +148,8 @@ def activate_promotions(promotion_id):
 ######################################################################
 # DEACTIVATE AN EXISTING PROMOTION
 ######################################################################
+
+
 @app.route("/promotions/<int:promotion_id>/deactivate", methods=["PUT"])
 def deactivate_promotions(promotion_id):
     """
@@ -142,6 +160,8 @@ def deactivate_promotions(promotion_id):
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
+
+
 def init_db():
     """ Initialies the SQLAlchemy app """
     global app
@@ -152,6 +172,7 @@ def check_content_type(content_type):
     """ Checks that the media type is correct """
     if "Content-Type" in request.headers and request.headers["Content-Type"] == content_type:
         return
-    app.logger.error("Invalid Content-Type: [%s]", request.headers.get("Content-Type"))
-    abort(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, "Content-Type must be {}".format(content_type))
-
+    app.logger.error(
+        "Invalid Content-Type: [%s]", request.headers.get("Content-Type"))
+    abort(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+          "Content-Type must be {}".format(content_type))

@@ -155,3 +155,4 @@ class Promotion(db.Model):
         logger.info("Processing promotion_type query for %s ...",
                     promotion_type)
         return cls.query.filter(cls.promotion_type == promotion_type)
+

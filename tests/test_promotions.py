@@ -22,6 +22,8 @@ DATABASE_URI = os.getenv(
 ######################################################################
 #  P R O M O T I O N   M O D E L   T E S T   C A S E S
 ######################################################################
+
+
 class TestPromotionModel(unittest.TestCase):
     """ Test Cases for Promotion Model """
 
@@ -55,19 +57,21 @@ class TestPromotionModel(unittest.TestCase):
 
     def test_create_a_promotion(self):
         """ Create a promotion and assert that it exists """
-        promotion = Promotion(title="Winter Sale", promotion_type="30%OFF", start_date="2021-11-01", end_date="2021-12-24")
+        promotion = Promotion(title="Winter Sale", promotion_type="30%OFF",
+                              start_date="2021-11-01", end_date="2021-12-24")
         self.assertTrue(promotion != None)
         self.assertEqual(promotion.id, None)
         self.assertEqual(promotion.title, "Winter Sale")
         self.assertEqual(promotion.promotion_type, "30%OFF")
         self.assertEqual(promotion.start_date, "2021-11-01")
         self.assertEqual(promotion.end_date, "2021-12-24")
-        
+
     def test_add_a_promotion(self):
         """ Create a promotion and add it to the database """
         promotions = Promotion.all()
         self.assertEqual(promotions, [])
-        promotion = Promotion(title="Winter Sale", promotion_type="30%OFF", start_date="2021-11-01", end_date="2021-12-24")
+        promotion = Promotion(title="Winter Sale", promotion_type="30%OFF",
+                              start_date="2021-11-01", end_date="2021-12-24")
         self.assertTrue(promotion != None)
         self.assertEqual(promotion.id, None)
         promotion.create()
@@ -124,7 +128,8 @@ class TestPromotionModel(unittest.TestCase):
 
     def test_deserialize_missing_data(self):
         """ Test deserialization of a Promotion with missing data """
-        data = {"id": 1, "title": "Happy Sale", "promotion_type": "Free delivery"}
+        data = {"id": 1, "title": "Happy Sale",
+                "promotion_type": "Free delivery"}
         promotion = Promotion()
         self.assertRaises(DataValidationError, promotion.deserialize, data)
 
@@ -147,7 +152,8 @@ class TestPromotionModel(unittest.TestCase):
         self.assertIsNot(promotion, None)
         self.assertEqual(promotion.id, promotions[1].id)
         self.assertEqual(promotion.title, promotions[1].title)
-        self.assertEqual(promotion.promotion_type, promotions[1].promotion_type)
+        self.assertEqual(promotion.promotion_type,
+                         promotions[1].promotion_type)
         self.assertEqual(promotion.start_date, promotions[1].start_date)
         self.assertEqual(promotion.end_date, promotions[1].end_date)   
     
@@ -172,7 +178,8 @@ class TestPromotionModel(unittest.TestCase):
         self.assertIsNot(promotion, None)
         self.assertEqual(promotion.id, promotions[1].id)
         self.assertEqual(promotion.title, promotions[1].title)
-        self.assertEqual(promotion.promotion_type, promotions[1].promotion_type)
+        self.assertEqual(promotion.promotion_type,
+                         promotions[1].promotion_type)
         self.assertEqual(promotion.start_date, promotions[1].start_date)
         self.assertEqual(promotion.end_date, promotions[1].end_date)
 
