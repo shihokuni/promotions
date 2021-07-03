@@ -53,7 +53,11 @@ def list_promotions():
     """ Returns all of the Promotions """
     app.logger.info("Request for promotion list")   
     promotions = []
-    promotions = Promotion.all()
+    promotion_type = request.args.get("promotion_type")
+    if promotion_type:
+        promotions = Promotion.find_by_promotiontype(promotion_type)
+    else:
+        promotions = Promotion.all()
 
     results = [promotion.serialize() for promotion in promotions]
     return make_response(jsonify(results), status.HTTP_200_OK)
@@ -122,7 +126,13 @@ def delete_promotions(promotion_id):
     Delete a Promotion
     This endpoint will delete a Promotion based the id specified in the path
     """
+    app.logger.info("Request to delete promotion with id: %s", promotion_id)
+    promotion = Promotion.find(promotion_id)
+    if promotion:
+        promotion.delete()
 
+    app.logger.info("Promotion with ID [%s] delete complete.", promotion_id)
+    return make_response("", status.HTTP_204_NO_CONTENT)
 ######################################################################
 # ACTIVATE AN EXISTING PROMOTION
 ######################################################################

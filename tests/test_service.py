@@ -16,14 +16,14 @@ from service import status  # HTTP Status Codes
 from service.models import db
 from service.routes import app, init_db
 from .factories import PromotionFactory
-from datetime import datetime as dt
 from dateutil import parser
 
 # DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///../db/test.db')
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgres://postgres:postgres@localhost:5432/postgres"
 )
-
+BASE_URL = "/promotions"
+CONTENT_TYPE_JSON = "application/json"
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
@@ -158,3 +158,18 @@ class TestPromotionServer(unittest.TestCase):
         resp = self.app.post("/promotions")
         self.assertEqual(resp.status_code,
                          status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+    def test_delete_promotion(self):
+        """Delete a Promotion"""
+        test_promotion = self._create_promotions(1)[0]
+        resp = self.app.delete(
+            "{0}/{1}".format(BASE_URL, test_promotion.id), content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(resp.data), 0)
+        # make sure they are deleted
+        resp = self.app.get(
+            "{0}/{1}".format(BASE_URL, test_promotion.id), content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
