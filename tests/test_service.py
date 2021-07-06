@@ -291,3 +291,18 @@ class TestPromotionServer(unittest.TestCase):
         # check the data just to be sure
         for promotion in data:
             self.assertEqual(promotion["active"], test_active)
+
+    def test_query_promotion_list_by_title(self):
+        """Query Promotions by Title"""
+        promotions = self._create_promotions(10)
+        test_title = promotions[0].title
+        title_promotions = [promotion for promotion in promotions if promotion.title == test_title]
+        resp = self.app.get(
+            BASE_URL, query_string="title={}".format(quote_plus(test_title))
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), len(title_promotions))
+        # check the data just to be sure
+        for promotion in data:
+            self.assertEqual(promotion["title"], test_title)

@@ -55,10 +55,14 @@ def list_promotions():
     promotions = []
     promotion_type = request.args.get("promotion_type")
     active = request.args.get("active")
+    title = request.args.get("title")
+
     if promotion_type:
         promotions = Promotion.find_by_promotiontype(promotion_type)
     elif active:
         promotions = Promotion.find_by_active(active)
+    elif title:
+        promotions = Promotion.find_by_title(title)
     else:
         promotions = Promotion.all()
 
