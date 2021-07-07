@@ -240,3 +240,18 @@ class TestPromotionModel(unittest.TestCase):
         self.assertEqual(promotions[0].end_date.strftime(
             '%Y-%m-%d'), "2021-12-31")
         self.assertEqual(promotions[0].active, False)
+
+    def test_find_by_promotion_end_date(self):
+        """Find a Promotion by end_date"""
+        Promotion(title="Summer Sale", promotion_type="10%OFF",
+                  start_date="2021-07-01", end_date="2021-08-31", active=True).create()
+        Promotion(title="Winter Sale", promotion_type="20%OFF",
+                  start_date="2021-12-01", end_date="2021-12-31", active=False).create()
+        promotions = Promotion.find_by_end_date("2021-12-31")
+        self.assertEqual(promotions[0].title, "Winter Sale")
+        self.assertEqual(promotions[0].promotion_type, "20%OFF")
+        self.assertEqual(promotions[0].start_date.strftime(
+            '%Y-%m-%d'), "2021-12-01")
+        self.assertEqual(promotions[0].end_date.strftime(
+            '%Y-%m-%d'), "2021-12-31")
+        self.assertEqual(promotions[0].active, False)

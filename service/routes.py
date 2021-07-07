@@ -56,6 +56,7 @@ def list_promotions():
     promotion_type = request.args.get("promotion_type")
     active = request.args.get("active")
     title = request.args.get("title")
+    end_date = request.args.get("end_date")
 
     if promotion_type:
         promotions = Promotion.find_by_promotiontype(promotion_type)
@@ -63,6 +64,8 @@ def list_promotions():
         promotions = Promotion.find_by_active(active)
     elif title:
         promotions = Promotion.find_by_title(title)
+    elif end_date:
+        promotions = Promotion.find_by_end_date(end_date)
     else:
         promotions = Promotion.all()
 

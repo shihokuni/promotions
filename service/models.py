@@ -184,3 +184,14 @@ class Promotion(db.Model):
         logger.info("Processing active query for %s ...",
                     title)
         return cls.query.filter(cls.title == title)
+
+    @classmethod
+    def find_by_end_date(cls, end_date):
+        """Returns all Promotions with the given end-date
+
+            Args:
+                end_date (Datetime): the active of the Promotions you want to match
+            """
+        logger.info("Processing active query for %s ...",
+                    end_date)
+        return cls.query.filter(cls.end_date == end_date)
