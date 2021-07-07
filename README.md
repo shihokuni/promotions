@@ -25,7 +25,6 @@ To run the Flask app, please use the following commands:
 ## Contents
 
 The project contains the following:
-
 ```text
 .coveragerc         - settings file for code coverage options
 .gitignore          - this will ignore vagrant and other metadata files
@@ -44,4 +43,172 @@ tests/              - test cases package
 └── test_service.py - test suite for service routes
 
 Vagrantfile         - Vagrant file that installs Python 3 and PostgreSQL
+```
 
+## REST API 
+
+The REST API is described below.
+
+## Get list of promotions
+
+```
+GET /promotions
+
+curl -i -H 'Accept: application/json' http://localhost:5000/promotions/
+
+Response
+
+HTTP/1.1 200 OK
+Date: Sun, 12 Dec 2021 00:00:00 GMT
+Status: 200 OK
+Connection: close
+Content-Type: application/json
+Content-Length: 2
+
+[
+  {
+    "active": true,
+    "end_date": "Sun, 12 Dec 2021 00:00:00 GMT",
+    "id": 1,
+    "promotion_type": "20%OFF",
+    "start_date": "Fri, 01 Jan 2021 00:00:00 GMT",
+    "title": "sale"
+  },
+  {
+    "active": true,
+    "end_date": "Sun, 12 Dec 2021 00:00:00 GMT",
+    "id": 2,
+    "promotion_type": "20%OFF",
+    "start_date": "Fri, 01 Jan 2021 00:00:00 GMT",
+    "title": "test"
+  }
+]
+```
+
+
+```
+GET /promotions/<int:promotion_id>
+
+curl -i -H 'Accept: application/json' http://localhost:5000/promotions/1
+
+Response
+
+HTTP/1.1 200 OK
+Date: Sun, 12 Dec 2021 00:00:00 GMT
+Status: 200 OK
+Connection: close
+Content-Type: application/json
+Content-Length: 36
+
+{
+  "active": true,
+  "end_date": "Sun, 12 Dec 2021 00:00:00 GMT",
+  "id": 1,
+  "promotion_type": "20%OFF",
+  "start_date": "Fri, 01 Jan 2021 00:00:00 GMT",
+  "title": "sale"
+}
+```
+
+```
+POST /promotions/
+
+Response
+
+HTTP/1.1 200 OK
+Date: Sun, 12 Dec 2021 00:00:00 GMT
+Status: 200 OK
+Connection: close
+Content-Type: application/json
+Content-Length: 36
+
+{
+  "active": true,
+  "end_date": "Sun, 12 Dec 2021 00:00:00 GMT",
+  "id": 1,
+  "promotion_type": "20%OFF",
+  "start_date": "Fri, 01 Jan 2021 00:00:00 GMT",
+  "title": "sale"
+}
+```
+
+```
+PUT /promotions/<int:promotion_id>
+
+Response
+
+HTTP/1.1 200 OK
+Date: Sun, 12 Dec 2021 00:00:00 GMT
+Status: 200 OK
+Connection: close
+Content-Type: application/json
+Content-Length: 36
+
+{
+  "active": true,
+  "end_date": "Sun, 12 Dec 2021 00:00:00 GMT",
+  "id": 1,
+  "promotion_type": "20%OFF",
+  "start_date": "Fri, 01 Jan 2021 00:00:00 GMT",
+  "title": "sale"
+}
+```
+
+
+```
+DELETE /promotions/<int:promotion_id>
+
+curl -i -H 'Accept: application/json' -X DELETE http://localhost:5000/promotions/1/
+
+Response
+
+HTTP/1.1 204 No Content
+Date: Sun, 12 Dec 2021 00:00:00 GMT
+Status: 204 No Content
+Connection: close
+```
+
+
+```
+PUT /promotions/<int:promotion_id>/activate
+
+Response
+
+HTTP/1.1 200 OK
+Date: Sun, 12 Dec 2021 00:00:00 GMT
+Status: 200 OK
+Connection: close
+Content-Type: application/json
+Content-Length: 40
+
+{
+  "active": true,
+  "end_date": "Sun, 12 Dec 2021 00:00:00 GMT",
+  "id": 1,
+  "promotion_type": "20%OFF",
+  "start_date": "Fri, 01 Jan 2021 00:00:00 GMT",
+  "title": "sale"
+}
+```
+
+```
+PUT /promotions/<int:promotion_id>/deactivate
+
+Response
+
+HTTP/1.1 200 OK
+Date: Sun, 12 Dec 2021 00:00:00 GMT
+Status: 200 OK
+Connection: close
+Content-Type: application/json
+Content-Length: 40
+
+{
+  "active": false,
+  "end_date": "Sun, 12 Dec 2021 00:00:00 GMT",
+  "id": 1,
+  "promotion_type": "20%OFF",
+  "start_date": "Fri, 01 Jan 2021 00:00:00 GMT",
+  "title": "test"
+}
+```
