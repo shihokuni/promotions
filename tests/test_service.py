@@ -306,3 +306,21 @@ class TestPromotionServer(unittest.TestCase):
         # check the data just to be sure
         for promotion in data:
             self.assertEqual(promotion["title"], test_title)
+            
+
+    def test_query_promotion_list_by_end_date(self):
+        """Query Promotions by End Date"""
+        promotions = self._create_promotions(10)
+        test_end_date = promotions[0].end_date
+        end_date_promotions = [promotion for promotion in promotions if promotion.end_date == test_end_date]
+        resp = self.app.get(
+            BASE_URL, query_string="end_date={}".format(test_end_date)
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), len(end_date_promotions))
+        # check the data just to be sure
+        for promotion in data:
+            self.assertEqual(parser.parse(promotion["end_date"]).
+                            strftime('%Y-%m-%d'),
+                             test_end_date)
