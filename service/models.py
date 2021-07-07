@@ -173,3 +173,14 @@ class Promotion(db.Model):
         logger.info("Processing active query for %s ...",
                     active)
         return cls.query.filter(cls.active == active)
+
+    @classmethod
+    def find_by_title(cls, title):
+        """Returns all Promotions with the given title
+
+            Args:
+                title (String): the active of the Promotions you want to match
+            """
+        logger.info("Processing active query for %s ...",
+                    title)
+        return cls.query.filter(cls.title == title)
