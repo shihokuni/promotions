@@ -176,10 +176,10 @@ class Promotion(db.Model):
 
     @classmethod
     def find_by_title(cls, title):
-        """Returns all Promotions with the given active
+        """Returns all Promotions with the given title
 
             Args:
-                active (boolean): the active of the Promotions you want to match
+                title (String): the active of the Promotions you want to match
             """
         logger.info("Processing active query for %s ...",
                     title)
