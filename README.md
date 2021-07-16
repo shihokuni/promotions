@@ -1,5 +1,9 @@
 # Promotions RESTful service
 
+[![Build Status](https://travis-ci.com/nyu-devops-2021-summer-promotions/promotions.svg?branch=main)](https://travis-ci.com/nyu-devops-2021-summer-promotions/promotions)
+[![codecov](https://codecov.io/gh/nyu-devops-2021-summer-promotions/promotions/branch/main/graph/badge.svg?token=OHFIJFX8Z5)](https://codecov.io/gh/nyu-devops-2021-summer-promotions/promotions)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 This is the repository for a RESTful service for adding promotions to products on an e-commerce store.
 
 ## Team Members
