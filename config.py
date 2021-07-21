@@ -6,9 +6,14 @@ import os
 # Get configuration from environment
 # DATABASE_URI = os.getenv("DATABASE_URI", "sqlite:///../development.db")
 DATABASE_URI = os.getenv(
-    "DATABASE_URI", "postgres://postgres:postgres@localhost:5432/postgres"
+    "DATABASE_URI", "postgres://xvtnvium:BeMqYh8MJGLE1s3bZp4XsE0n9hcQ7qLF@batyr.db.elephantsql.com/xvtnvium"
 )
 
+# override if we are running in Cloud Foundry
+if 'VCAP_SERVICES' in os.environ:
+    vcap = json.loads(os.environ['VCAP_SERVICES'])
+    DATABASE_URI = vcap['user-provided'][0]['credentials']['url']
+    
 # Configure SQLAlchemy
 SQLALCHEMY_DATABASE_URI = DATABASE_URI
 SQLALCHEMY_TRACK_MODIFICATIONS = False
