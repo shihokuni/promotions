@@ -6,7 +6,7 @@ import os
 # Get configuration from environment
 # DATABASE_URI = os.getenv("DATABASE_URI", "sqlite:///../development.db")
 DATABASE_URI = os.getenv(
-    "DATABASE_URI", "postgres://postgres:postgres@localhost:5432/postgres"
+    "DATABASE_URI", "postgres://xvtnvium:BeMqYh8MJGLE1s3bZp4XsE0n9hcQ7qLF@batyr.db.elephantsql.com/xvtnvium"
 )
 
 # override if we are running in Cloud Foundry
