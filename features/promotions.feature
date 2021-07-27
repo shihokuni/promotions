@@ -20,6 +20,13 @@ Feature: The promotion service back-end
     Scenario: Create a Promotion
 
     Scenario: List all Promotions
+        When I visit the "Home Page"
+        And I press the "Search" button
+        Then I should see "New Product" in the results
+        And I should see "Christmas Sale" in the results
+        And I should see "Black Friday" in the results
+        And I should see "Summer Sale" in the results
+        And I should not see "Winter Sale" in the results
 
     Scenario: Read a promotion
         When I visit the "Home Page"
