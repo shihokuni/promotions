@@ -7,6 +7,7 @@ For information on Waiting until elements are present in the HTML see:
 """
 
 import logging
+import requests
 from behave import when, then
 from compare import expect, ensure
 from selenium.webdriver.common.by import By
@@ -24,7 +25,7 @@ def step_impl(context):
     context.resp = requests.get(context.base_url + '/promotions', headers=headers)
     expect(context.resp.status_code).to_equal(200)
     for promotion in context.resp.json():
-        context.resp = requests.delete(context.base_url + '/promotions/' + str(promotion["_id"]), headers=headers)
+        context.resp = requests.delete(context.base_url + '/promotions/' + str(promotion["id"]), headers=headers)
         expect(context.resp.status_code).to_equal(204)
     
     # load the database with new promotions
