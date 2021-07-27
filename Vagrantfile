@@ -77,7 +77,8 @@ Vagrant.configure(2) do |config|
     echo "****************************************"
     # Install Python 3 and dev tools 
     apt-get update
-    apt-get install -y git tree wget vim python3-dev python3-pip python3-venv apt-transport-https
+    # apt-get install -y git tree wget vim python3-dev python3-pip python3-venv apt-transport-https
+    apt-get install -y git tree wget vim jq python3-dev python3-pip python3-venv python3-selenium
     apt-get upgrade python3
     
     # Install Chromium Driver
@@ -85,6 +86,9 @@ Vagrant.configure(2) do |config|
     
     # Need PostgreSQL development library to compile on arm64
     apt-get install -y libpq-dev
+
+    # Install Chromium Driver
+    apt-get install -y chromium-chromedriver
 
     # Create a Python3 Virtual Environment and Activate it in .profile
     sudo -H -u vagrant sh -c 'python3 -m venv ~/venv'

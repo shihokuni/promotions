@@ -17,6 +17,10 @@ Feature: The promotion service back-end
         Then I should see "Promotion RESTful Service" in the title
         And I should not see "404 Not Found"
 
+    Scenario: Create a Promotion
+
+    Scenario: List all Promotions
+
     Scenario: Read a promotion
         When I visit the "Home Page"
         And I press the "Search" button
@@ -30,3 +34,16 @@ Feature: The promotion service back-end
         And I should see "2021-07-01" in the "start_date" field
         And I should see "2022-07-01" in the "end_date" field
         And I should see "True" in the "Active" dropdown
+
+    Scenario: Search all 10%OFF
+
+    Scenario: Update a Promotion
+
+    Scenario: Delete a Promotion
+
+    Scenario: Activate a Promotion
+
+    Scenario: Deactivate a Promotion
+
+
+

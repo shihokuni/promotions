@@ -7,7 +7,6 @@ For information on Waiting until elements are present in the HTML see:
 """
 
 import logging
-import json
 import requests
 from behave import when, then
 from compare import expect, ensure
