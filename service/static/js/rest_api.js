@@ -16,19 +16,19 @@ $(function () {
         var start_date = Date.parse(res.start_date);
         var start_dateObject = new Date(start_date);
         var format_start_year = start_dateObject.getUTCFullYear();
-        var format_start_month = toDoubleDigits(start_dateObject.getUTCMonth());
+        var format_start_month = toDoubleDigits(start_dateObject.getUTCMonth()+1);
         var format_start_date = toDoubleDigits(start_dateObject.getUTCDate());
         var end_date = Date.parse(res.end_date);
         var end_dateObject = new Date(end_date);
         var format_end_year = end_dateObject.getUTCFullYear();
-        var format_end_month = toDoubleDigits(end_dateObject.getUTCMonth());
+        var format_end_month = toDoubleDigits(end_dateObject.getUTCMonth()+1);
         var format_end_date = toDoubleDigits(end_dateObject.getUTCDate());
         
         $("#promotion_id").val(res.id);
         $("#promotion_title").val(res.title);
-        $("#promotion_type").val(res.promotion_type);
-        $("#promotion_start").val([format_start_year, format_start_month, format_start_date].join('-'));
-        $("#promotion_end").val([format_end_year, format_end_month, format_end_date].join('-'));
+        $("#promotion_promotion_type").val(res.promotion_type);
+        $("#promotion_start_date").val([format_start_year, format_start_month, format_start_date].join('-'));
+        $("#promotion_end_date").val([format_end_year, format_end_month, format_end_date].join('-'));
         if (res.active == true) {
             $("#promotion_active").val("true");
         } else {
@@ -39,9 +39,9 @@ $(function () {
     /// Clears all form fields
     function clear_form_data() {
         $("#promotion_title").val("");
-        $("#promotion_type").val("");
-        $("#promotion_start").val("");
-        $("#promotion_end").val("");
+        $("#promotion_promotion_type").val("");
+        $("#promotion_start_date").val("");
+        $("#promotion_end_date").val("");
         $("#promotion_active").val("");
     }
 
@@ -58,9 +58,9 @@ $(function () {
     $("#create-btn").click(function () {
 
         var title = $("#promotion_title").val();
-        var type = $("#promotion_type").val();
-        var start_date = $("#promotion_start").val();
-        var end_date = $("#promotion_end").val();
+        var type = $("#promotion_promotion_type").val();
+        var start_date = $("#promotion_start_date").val();
+        var end_date = $("#promotion_end_date").val();
         var active = $("#promotion_active").val() == "true";
 
         var data = {
@@ -97,9 +97,9 @@ $(function () {
 
         var promotion_id = $("#promotion_id").val();
         var title = $("#promotion_title").val();
-        var type = $("#promotion_type").val();
-        var start_date = $("#promotion_start").val();
-        var end_date = $("#promotion_end").val();
+        var type = $("#promotion_promotion_type").val();
+        var start_date = $("#promotion_start_date").val();
+        var end_date = $("#promotion_end_date").val();
         var active = $("#promotion_active").val();
 
         var data = {
@@ -249,7 +249,7 @@ $(function () {
     $("#search-btn").click(function () {
 
         var title = $("#promotion_title").val();
-        var type = $("#promotion_type").val();
+        var type = $("#promotion_promotion_type").val();
         var active = $("#promotion_active").val() == "true";
 
         var queryString = ""
@@ -304,12 +304,12 @@ $(function () {
                 var start_date = Date.parse(promotion.start_date);
                 var start_dateObject = new Date(start_date);
                 var format_start_year = start_dateObject.getUTCFullYear();
-                var format_start_month = toDoubleDigits(start_dateObject.getUTCMonth());
+                var format_start_month = toDoubleDigits(start_dateObject.getUTCMonth()+1);
                 var format_start_date = toDoubleDigits(start_dateObject.getUTCDate());
                 var end_date = Date.parse(promotion.end_date);
                 var end_dateObject = new Date(end_date);
                 var format_end_year = end_dateObject.getUTCFullYear();
-                var format_end_month = toDoubleDigits(end_dateObject.getUTCMonth());
+                var format_end_month = toDoubleDigits(end_dateObject.getUTCMonth()+1);
                 var format_end_date = toDoubleDigits(end_dateObject.getUTCDate());
                 var row = "<tr><td>"+promotion.id+"</td><td>"+promotion.title+"</td><td>"+promotion.promotion_type+"</td><td>"+[format_start_year, format_start_month, format_start_date].join('-')+"</td><td>"+[format_end_year, format_end_month, format_end_date].join('-')+"</td><td>"+promotion.active+"</td></tr>";
                 $("#search_results").append(row);
