@@ -21,17 +21,25 @@ Feature: The promotion service back-end
 
     Scenario: List all Promotions
 
-
     Scenario: Read a promotion
-
+        When I visit the "Home Page"
+        And I press the "Search" button
+        Then I should see the message "Success"
+        When I copy the "Id" field
+        And I press the "Clear" button
+        And I paste the "Id" field
+        When I press the "Retrieve" button
+        Then I should see "Christmas Sale" in the "title" field
+        And I should see "buy 1 get 2" in the "promotion_type" field
+        And I should see "2021-07-01" in the "start_date" field
+        And I should see "2022-07-01" in the "end_date" field
+        And I should see "True" in the "Active" dropdown
 
     Scenario: Search all 10%OFF
-
 
     Scenario: Update a Promotion
 
     Scenario: Delete a Promotion
-
 
     Scenario: Activate a Promotion
 

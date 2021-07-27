@@ -8,6 +8,7 @@ For information on Waiting until elements are present in the HTML see:
 
 import logging
 import requests
+import json
 from behave import when, then
 from compare import expect, ensure
 from selenium.webdriver.common.by import By
