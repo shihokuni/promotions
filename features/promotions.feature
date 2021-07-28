@@ -50,17 +50,18 @@ Feature: The promotion service back-end
 
     Scenario: Activate a Promotion
         When I visit the "Home Page"
+        And I set the "title" to "New Product"
         And I press the "Search" button
         Then I should see the message "Success"
-        Then I should see "Summer Sale" in the results
+        Then I should see "New Product" in the results
         When I copy the "Id" field
         And I press the "Clear" button
         And I paste the "Id" field
         When I press the "Retrieve" button
-        Then I should see "Summer Sale" in the "title" field
-        And I should see "buy 1 get 1" in the "promotion_type" field
-        And I should see "2021-11-01" in the "start_date" field
-        And I should see "2022-11-01" in the "end_date" field
+        Then I should see "New Product" in the "title" field
+        And I should see "10%OFF" in the "promotion_type" field
+        And I should see "2021-01-01" in the "start_date" field
+        And I should see "2022-01-01" in the "end_date" field
         And I should see "False" in the "Active" dropdown
         When I press the "Activate" button
         Then I should see the message "Promotion has been activated!"
