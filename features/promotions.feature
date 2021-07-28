@@ -18,6 +18,27 @@ Feature: The promotion service back-end
         And I should not see "404 Not Found"
 
     Scenario: Create a Promotion
+        When I visit the "Home Page"
+        And I set the "Title" to "Christmas Sale"
+        And I set the "Type" to "buy 1 get 2"
+        And I set the "Start date" to "08/12/2021"
+        And I set the "Finish date" to "08/31/2021"
+        And I select "False" in the "Active" dropdown
+        And I press the "Create" button
+        Then I should see the message "Success"
+        When I copy the "Id" field
+        And I press the "Clear" button
+        Then the "Id" field should be empty
+        And the "Title" field should be empty
+        And the "Type" field should be empty
+        When I paste the "Id" field
+        And I press the "Retrieve" button
+        Then I should see "BOGO" in the "Title" field
+        And I should see "Free gift with purchase" in the "Type" field
+        And I should see "08/12/2021" in the "Start date" field
+        And I should see "08/25/2021" in the "Start date" field
+        And I should see "False" in the "Active" dropdown
+
 
     Scenario: List all Promotions
         When I visit the "Home Page"
