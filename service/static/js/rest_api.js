@@ -257,6 +257,7 @@ $(function () {
 
         var title = $("#promotion_title").val();
         var type = $("#promotion_promotion_type").val();
+        var end_date = $("#promotion_end_date").val();
         var active = $("#promotion_active").val() == "true";
 
         var queryString = ""
@@ -269,6 +270,13 @@ $(function () {
                 queryString += '&promotion_type=' + type
             } else {
                 queryString += 'promotion_type=' + type
+            }
+        }
+        if (end_date) {
+            if (queryString.length > 0) {
+                queryString += '&end_date=' + end_date
+            } else {
+                queryString += 'end_date=' + end_date
             }
         }
         if (active) {
