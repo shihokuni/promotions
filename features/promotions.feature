@@ -63,7 +63,35 @@ Feature: The promotion service back-end
         And I should see "2022-07-01" in the "end_date" field
         And I should see "True" in the "Active" dropdown
 
-    Scenario: Search all 10%OFF
+    Scenario: Query a Promotion
+        When I visit the "Home Page"
+        And I set the "promotion_type" to "10%OFF"
+        And I press the "Search" button
+        Then I should see "New Product" in the results
+        And I should not see "Christmas Sale" in the results
+        And I should not see "Black Friday" in the results
+        And I should not see "Summer Sale" in the results
+        When I press the "Clear" button
+        And I set the "title" to "Black Friday"
+        And I press the "Search" button
+        Then I should see "20%OFF" in the results
+        And I should not see "10%OFF" in the results
+        And I should not see "buy 1 get 1 free" in the results
+        And I should not see "buy 1 get 2" in the results
+        When I press the "Clear" button
+        And I set the "end_date" to "11/01/2022"
+        And I press the "Search" button
+        Then I should see "Summer Sale" in the results
+        And I should not see "Christmas Sale" in the results
+        And I should not see "Black Friday" in the results
+        And I should not see "New Product" in the results
+        When I press the "Clear" button
+        And I select "True" in the "active" dropdown
+        And I press the "Search" button
+        Then I should see "Christmas Sale" in the results
+        And I should see "Black Friday" in the results
+        And I should not see "Summer Sale" in the results
+        And I should not see "New Product" in the results
 
     Scenario: Update a Promotion
         When I visit the "Home Page"
@@ -83,7 +111,7 @@ Feature: The promotion service back-end
         And I press the "Search" button
         Then I should see "Winter Sale" in the results
         Then I should not see "Black Friday" in the results
-    
+
     Scenario: Delete a Promotion
         When I visit the "Home Page"
         And I set the "title" to "Black Friday"
