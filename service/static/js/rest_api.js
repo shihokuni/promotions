@@ -80,6 +80,7 @@ $(function () {
 
         ajax.done(function(res){
             update_form_data(res)
+            $("#search_results").empty()
             flash_message("Success")
         });
 
@@ -107,7 +108,7 @@ $(function () {
             "promotion_type": type,
             "start_date": start_date,
             "end_date": end_date,
-            "active": active
+            "active": Boolean(active)
         };
 
         var ajax = $.ajax({
@@ -119,6 +120,7 @@ $(function () {
 
         ajax.done(function(res){
             update_form_data(res)
+            $("#search_results").empty()
             flash_message("Success")
         });
 
@@ -146,6 +148,7 @@ $(function () {
         ajax.done(function(res){
             //alert(res.toSource())
             update_form_data(res)
+            $("#search_results").empty()
             flash_message("Success")
         });
 
@@ -173,6 +176,7 @@ $(function () {
 
         ajax.done(function(res){
             clear_form_data()
+            $("#search_results").empty()
             flash_message("Promotion has been Deleted!")
         });
 
@@ -198,6 +202,7 @@ $(function () {
 
         ajax.done(function(res){
             update_form_data(res)
+            $("#search_results").empty()
             flash_message("Promotion has been activated!")
         });
 
@@ -224,6 +229,7 @@ $(function () {
 
         ajax.done(function(res){
             update_form_data(res)
+            $("#search_results").empty()
             flash_message("Promotion has been deactivated!")
         });
 
@@ -259,9 +265,9 @@ $(function () {
         }
         if (type) {
             if (queryString.length > 0) {
-                queryString += '&type=' + type
+                queryString += '&promotion_type=' + type
             } else {
-                queryString += 'type=' + type
+                queryString += 'promotion_type=' + type
             }
         }
         if (active) {
