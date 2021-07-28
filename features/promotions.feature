@@ -84,6 +84,21 @@ Feature: The promotion service back-end
         And I should see "True" in the "Active" dropdown
 
     Scenario: Deactivate a Promotion
-
+        When I visit the "Home Page"
+        And I press the "Search" button
+        Then I should see the message "Success"
+        Then I should see "Christmas Sale" in the results
+        When I copy the "Id" field
+        And I press the "Clear" button
+        And I paste the "Id" field
+        When I press the "Retrieve" button
+        Then I should see "Christmas Sale" in the "title" field
+        And I should see "buy 1 get 2" in the "promotion_type" field
+        And I should see "2021-07-01" in the "start_date" field
+        And I should see "2022-07-01" in the "end_date" field
+        And I should see "True" in the "Active" dropdown
+        When I press the "Deactivate" button
+        Then I should see the message "Promotion has been deactivated!"
+        And I should see "False" in the "Active" dropdown
 
 
