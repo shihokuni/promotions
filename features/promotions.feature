@@ -51,6 +51,21 @@ Feature: The promotion service back-end
     Scenario: Activate a Promotion
 
     Scenario: Deactivate a Promotion
+        When I visit the "Home Page"
+        And I press the "Search" button
+        Then I should see the message "Success"
+        Then I should see "Summer Sale" in the results
+        When I cope the "Id" field
+        And I paste the "Id" in promotion id text field
+        And press the "Retrieve" button
+        Then I should see "New Product" in the "title" field
+        And I should see "10%OFF" in the "promotion_type" field
+        And I should see "2021-01-01" in the "start_date" field
+        And I should see "2022-01-01" in the "end_date" field
+        And I should see "True" in the "Active" dropdown
+        And I press the "Deactivate" button
+        Then I should see "Status" update Promotion has been deactivated!
+        And I should see "False" in the "Active" dropdown
 
 
 
