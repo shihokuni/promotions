@@ -103,19 +103,20 @@ $(function () {
         var end_date = $("#promotion_end_date").val();
         var active = $("#promotion_active").val();
 
-        var data = {
-            "title": title,
-            "promotion_type": type,
-            "start_date": start_date,
-            "end_date": end_date,
-            "active": Boolean(active)
-        };
+        var data = 
+            JSON.stringify({"title": title, "promotion_type": type, "start_date": start_date, "end_date": end_date,"active": Boolean(active)}, function(key, value) {
+                if (value != "") {
+                    return value;
+                } else {
+                  return undefined; 
+                }
+            });
 
         var ajax = $.ajax({
                 type: "PUT",
                 url: "/promotions/" + promotion_id,
                 contentType: "application/json",
-                data: JSON.stringify(data)
+                data: data
             })
 
         ajax.done(function(res){
