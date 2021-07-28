@@ -45,7 +45,23 @@ Feature: The promotion service back-end
     Scenario: Search all 10%OFF
 
     Scenario: Update a Promotion
-
+        When I visit the "Home Page"
+        And I set the "title" to "Black Friday"
+        And I press the "Search" button
+        Then I should see "Black Friday" in the "title" field
+        And I should see "20%OFF" in the "promotion_type" field
+        When I change "title" to "Winter Sale"
+        And I press the "Update" button
+        Then I should see the message "Success"
+        When I copy the "Id" field
+        And I press the "Clear" button
+        And I paste the "Id" field
+        And I press the "Retrieve" button
+        Then I should see "Winter Sale" in the "title" field
+        When I press the "Clear" button
+        And I press the "Search" button
+        Then I should see "Winter Sale" in the results
+        Then I should not see "Black Friday" in the results
     Scenario: Delete a Promotion
 
     Scenario: Activate a Promotion
