@@ -62,7 +62,19 @@ Feature: The promotion service back-end
         And I press the "Search" button
         Then I should see "Winter Sale" in the results
         Then I should not see "Black Friday" in the results
+    
     Scenario: Delete a Promotion
+        When I visit the "Home Page"
+        And I set the "title" to "Black Friday"
+        And I press the "Search" button
+        Then I should see "Black Friday" in the "title" field
+        And I should see "20%OFF" in the "promotion_type" field
+        When I press the "Delete" button
+        Then I should see the message "Promotion has been Deleted!"
+        When I press the "Clear" button
+        And I press the "Search" button
+        Then I should see "Christmas Sale" in the results
+        Then I should not see "Black Friday" in the results
 
     Scenario: Activate a Promotion
 
