@@ -1,3 +1,5 @@
+## commit messageにはチケット番号をいれる！
+
 # Promotions RESTful service
 
 [![Build Status](https://travis-ci.com/nyu-devops-2021-summer-promotions/promotions.svg?branch=main)](https://travis-ci.com/nyu-devops-2021-summer-promotions/promotions)
